@@ -1,10 +1,13 @@
-import { Entity, ObjectIdColumn, Column, CreateDateColumn } from 'typeorm';
+import { Entity, ObjectIdColumn, Column, CreateDateColumn, OneToMany } from 'typeorm';
 import { ObjectId } from 'mongodb';
-import { Exclude } from 'class-transformer';
+import { Exclude, Transform } from 'class-transformer';
+import { CategoryEntity } from 'src/categories/entities/category.entity';
+import { ProductEntity } from 'src/products/entities/product.entity';
 
 @Entity('users')
 export class UserEntity {
   @ObjectIdColumn({ primary: true, generated: 'uuid' })
+  @Transform(({ value }) => value?.toString())
   _id!: ObjectId;
 
   @Column({ unique: true })
@@ -19,4 +22,11 @@ export class UserEntity {
 
   @CreateDateColumn()
   createdAt!: Date;
+
+  @OneToMany(() => CategoryEntity, (cat) => cat.addedBy)
+  categories!: CategoryEntity[];
+
+
+  @OneToMany(() => ProductEntity, (prod) => prod.addedBy)
+  products!: ProductEntity[];
 }
