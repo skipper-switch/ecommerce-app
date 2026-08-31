@@ -18,6 +18,7 @@ import { AuthroizeRoles } from 'src/utility/decorators/authorize-roles.decorator
 import { Roles } from 'src/utility/common/user-roles.enum';
 import { CurrentUser } from 'src/utility/decorators/current-user.decorator';
 import { UserEntity } from 'src/user/entities/user.entity';
+import { ProductEntity } from './entities/product.entity';
 
 @Controller('products')
 export class ProductsController {
@@ -33,5 +34,22 @@ export class ProductsController {
     return await this.productsService.create(createProductDto, currentUser);
   }
 
+  @Get()
+  async findAll(): Promise<{
+    count: number;
+    statusCode: number;
+    data: ProductEntity[];
+  }> {
+    return await this.productsService.findAll();
+  }
 
+
+   @Get(':productId')
+  async findOne(@Param('productId') productId: string): Promise<{
+    status: string;
+    statusCode: number;
+    data: ProductEntity;
+  }> {
+    return await this.productsService.findOne(productId);
+  }
 }

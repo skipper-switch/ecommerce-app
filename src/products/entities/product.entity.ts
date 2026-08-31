@@ -1,19 +1,23 @@
 import { CategoryEntity } from 'src/categories/entities/category.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
+import { ObjectId } from 'mongodb';
+import { Transform } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
+  ObjectIdColumn,
   OneToMany,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity({ name: 'products' })
 export class ProductEntity {
-  @Column({ primary: true, generated: 'uuid' })
-  _id!: string;
+  @ObjectIdColumn()
+  @Transform(({ value }) => value?.toString())
+  _id!: ObjectId;
 
   @Column()
   title!: string;
