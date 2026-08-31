@@ -19,3 +19,12 @@ So this explicit select: [...] is a way of saying: "I know password is normally 
 
 
 DTO-entity-Controller-service
+
+
+
+Users → Orders (One-to-Many): This means one user can write many reviews, but each review is written by only one user.
+Users → Reviews (One-to-Many): This means one product can appear in many orders, and one order can contain many products.
+Products → Orders (Many-to-Many): This means one product can have many reviews, but each review belongs to only one product.
+Products → Reviews (One-to-Many): This means many products can belong to one category, while each product belongs to one category.
+Products → Categories (Many-to-One): This means many products can belong to one category, but each product belongs to one category.
+

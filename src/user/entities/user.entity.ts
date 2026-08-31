@@ -3,6 +3,7 @@ import { ObjectId } from 'mongodb';
 import { Exclude, Transform } from 'class-transformer';
 import { CategoryEntity } from 'src/categories/entities/category.entity';
 import { ProductEntity } from 'src/products/entities/product.entity';
+import { Roles } from 'src/utility/common/user-roles.enum';
 
 @Entity('users')
 export class UserEntity {
@@ -19,6 +20,14 @@ export class UserEntity {
 
   @Column()
   name!: string;
+
+  @Column({
+    type: 'enum',
+    enum: Roles,
+    array: true,
+    default: [Roles.USER],
+  })
+  roles!: Roles[];
 
   @CreateDateColumn()
   createdAt!: Date;

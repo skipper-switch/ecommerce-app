@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserSignInDto } from './dto/user-signin.dto';
+import { Roles } from 'src/utility/common/user-roles.enum';
 
 @Injectable()
 export class AuthService {
@@ -31,6 +32,7 @@ export class AuthService {
     name: userSignUpDto.name,
     email: userSignUpDto.email,
     password: hashedPassword,
+    roles: [Roles.USER],
   });
 
   const user = await this.usersRepository.save(newUser);
@@ -62,6 +64,8 @@ export class AuthService {
       where: { email: email },
       select: { _id: true, email: true, password: true, name: true },
     });
+
+    
     if (!user) {
       throw new NotFoundException('Email is not exists');
     }

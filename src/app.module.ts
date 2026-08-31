@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
@@ -7,6 +7,8 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
+import { UserEntity } from './user/entities/user.entity';
+import { CurrentUserMiddleware } from './utility/middlewares/current-user.middleware';
 
 @Module({
   imports: [
@@ -22,12 +24,17 @@ import { CategoriesModule } from './categories/categories.module';
         synchronize: true,
       }),
     }),
+    TypeOrmModule.forFeature([UserEntity]),
     AuthModule,
     UserModule,
     ProductsModule,
     CategoriesModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, CurrentUserMiddleware],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(CurrentUserMiddleware).forRoutes('*');
+  }
+}
